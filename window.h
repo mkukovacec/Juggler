@@ -1,5 +1,5 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef __WINDOW_H__
+#define __WINDOW_H__
 
 #include <SDL2/SDL.h>
 
@@ -16,7 +16,7 @@ public:
   void initialize_surface();
   void initialize_texture();
   void resize(int width, int height);
-  void query_texture(SDL_Rect dest);
+  void query_texture(SDL_Rect &dest);
   void refresh_window(SDL_Rect dest);
   void destroy();
 };

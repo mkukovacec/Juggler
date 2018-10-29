@@ -55,7 +55,7 @@ void Window::initialize_texture() {
   }
 }
 
-void Window::query_texture(SDL_Rect dest) {
+void Window::query_texture(SDL_Rect &dest) {
   SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
 }
 
