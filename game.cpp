@@ -7,6 +7,13 @@
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
 
+#ifndef max
+#define max(a, b)            (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a, b)            (((a) < (b)) ? (a) : (b))
+#endif
+
 void Game::play_game() {
   int game_finish = 0;
   SDL_Rect dest;
@@ -24,6 +31,7 @@ void Game::play_game() {
 
   float x_pos = 280;
   float y_pos = 400;
+  int click_turns = 0;
   //
   while (game_finish != 1){
     SDL_Event event;
@@ -41,14 +49,17 @@ void Game::play_game() {
 
     vy+=9.81;
     // reverse velocity if mouse button 1 pressed
-    if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
-    {
-        // vx = -400.0;
-        vy = -400.0;
+    if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)){
+        if (click_turns==0){
+          vy = -400.0;
+          click_turns=25;
+        }
     }
 
     y_pos += vy / 60;
     x_pos += vx / 60;
+
+    click_turns = max(0, click_turns-1);
 
     // collision detection with bounds
     if (y_pos <= 0) y_pos = 0;
