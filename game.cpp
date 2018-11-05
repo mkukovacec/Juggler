@@ -32,7 +32,6 @@ void Game::play_game() {
 
   float x_pos = 280;
   float y_pos = 400;
-  int click_turns = 0;
   //
   while (game_finish != 1){
     SDL_Event event;
@@ -51,17 +50,14 @@ void Game::play_game() {
     vy+=9.81;
     // reverse velocity if mouse button 1 pressed
     if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)){
-        if (click_turns==0){
+        if (vy>0){
           calculate_new_velocity(vx, vy, x_pos, y_pos, mouse_x, mouse_y);
           vy = -400.0;
-          click_turns=25;
         }
     }
 
     y_pos += vy / 60;
     x_pos += vx / 60;
-
-    click_turns = max(0, click_turns-1);
 
     // collision detection with bounds
     if (y_pos <= 0) {
@@ -78,7 +74,7 @@ void Game::play_game() {
 
     if (y_pos >= WINDOW_HEIGHT - dest.h) {
       y_pos = WINDOW_HEIGHT - dest.h;
-      printf("GAME OVER");
+      printf("GAME OVER\n");
       game_finish=1;
     }
     // set the positions in the struct
