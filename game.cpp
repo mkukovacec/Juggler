@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include "game.h"
 #include "window.h"
+#include "physics.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
@@ -51,6 +52,7 @@ void Game::play_game() {
     // reverse velocity if mouse button 1 pressed
     if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)){
         if (click_turns==0){
+          calculate_new_velocity(vx, vy, x_pos, y_pos, mouse_x, mouse_y);
           vy = -400.0;
           click_turns=25;
         }
@@ -62,7 +64,17 @@ void Game::play_game() {
     click_turns = max(0, click_turns-1);
 
     // collision detection with bounds
-    if (y_pos <= 0) y_pos = 0;
+    if (y_pos <= 0) {
+      wall_hit(vy, y_pos, 0);
+    }
+
+    if (x_pos <= 0){
+      wall_hit(vx, x_pos, 0);
+    }
+
+    if (x_pos >= WINDOW_WIDTH - dest.w) {
+      wall_hit(vx, x_pos, WINDOW_WIDTH - dest.w);
+    }
 
     if (y_pos >= WINDOW_HEIGHT - dest.h) {
       y_pos = WINDOW_HEIGHT - dest.h;
