@@ -1,12 +1,13 @@
 #ifndef __PHYSICS_H__
 #define __PHYSICS_H__
 #include <cstdlib>
+#include <cmath>
 
 void calculate_new_velocity(float & vx, float & vy, float x_pos, float y_pos, float click_x, float click_y){
   float x = click_x - x_pos;
   float y = click_y - y_pos;
 
-  vx -= x;
+  vx -= x * log10(abs(x));
   vy -= y;
 }
 
