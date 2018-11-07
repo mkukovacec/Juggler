@@ -19,7 +19,6 @@ void Game::play_game() {
   int game_finish = 0;
   SDL_Rect dest;
 
-  window->query_texture(dest);
   dest.w = 40;
   dest.h = 40;
   dest.x = 280;
@@ -81,7 +80,7 @@ void Game::play_game() {
     dest.y = (int) y_pos;
     dest.x = (int) x_pos;
 
-    window->refresh_window(dest);
+    window->refresh_window(dest, 0);
     SDL_Delay(1000/60);
   }
 

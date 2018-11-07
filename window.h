@@ -7,8 +7,11 @@ class Window {
 private:
   SDL_Window* win;
   SDL_Renderer* rend;
-  SDL_Surface* surface;
-  SDL_Texture* tex;
+  SDL_Surface* soccer_surface;
+  SDL_Texture* soccer_texture;
+  SDL_Surface* background_surface;
+  SDL_Texture* background_texture;
+
 public:
   Window();
   void initialize_graphics();
@@ -16,8 +19,7 @@ public:
   void initialize_surface();
   void initialize_texture();
   void resize(int width, int height);
-  void query_texture(SDL_Rect &dest);
-  void refresh_window(SDL_Rect dest);
+  void refresh_window(SDL_Rect dest, int score);
   void destroy();
 };
 

@@ -38,41 +38,49 @@ void Window::initialize_render() {
 }
 
 void Window::initialize_surface() {
-  surface = IMG_Load("resources/soccer.png");
-  if (!surface) {
+  soccer_surface = IMG_Load("resources/soccer.png");
+  background_surface = IMG_Load("resources/background.png");
+  if (!soccer_surface || !background_surface) {
       printf("error creating surface\n");
       this->destroy();
   }
 }
 
 void Window::initialize_texture() {
-  tex = SDL_CreateTextureFromSurface(rend, surface);
-  SDL_FreeSurface(surface);
-  if (!tex)
+  soccer_texture = SDL_CreateTextureFromSurface(rend, soccer_surface);
+  background_texture = SDL_CreateTextureFromSurface(rend, background_surface);
+  if (!soccer_texture || !background_texture)
   {
       printf("error creating texture: %s\n", SDL_GetError());
       this->destroy();
   }
 }
 
-void Window::query_texture(SDL_Rect &dest) {
-  SDL_QueryTexture(tex, NULL, NULL, &dest.w, &dest.h);
-}
-
 void Window::resize(int width, int height) {
   SDL_SetWindowSize(win, width, height);
 }
 
-void Window::refresh_window(SDL_Rect dest) {
+void Window::refresh_window(SDL_Rect dest, int score) {
   SDL_RenderClear(rend);
-  SDL_RenderCopy(rend, tex, NULL, &dest);
+  SDL_RenderCopy(rend, background_texture, NULL, NULL);
+  SDL_RenderCopy(rend, soccer_texture, NULL, &dest);
   SDL_RenderPresent(rend);
 }
 
 void Window::destroy() {
-  if (tex) {
-    SDL_DestroyTexture(tex);
-    printf("Texture destroyed\n");
+  if (soccer_surface){
+    SDL_FreeSurface(soccer_surface);
+  }
+  if (background_surface){
+    SDL_FreeSurface(background_surface);
+  }
+  if (soccer_texture) {
+    SDL_DestroyTexture(soccer_texture);
+    printf("Soccer texture destroyed\n");
+  }
+  if (background_texture) {
+    SDL_DestroyTexture(soccer_texture);
+    printf("Background texture destroyed\n");
   }
   if (rend){
     SDL_DestroyRenderer(rend);
