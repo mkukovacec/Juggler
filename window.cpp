@@ -9,8 +9,6 @@
 Window::Window() {
   this->initialize_graphics();
   this->initialize_render();
-  this->initialize_surface();
-  this->initialize_texture();
 }
 
 void Window::initialize_graphics(){
@@ -37,50 +35,27 @@ void Window::initialize_render() {
   }
 }
 
-void Window::initialize_surface() {
-  soccer_surface = IMG_Load("resources/soccer.png");
-  background_surface = IMG_Load("resources/background.png");
-  if (!soccer_surface || !background_surface) {
-      printf("error creating surface\n");
-      this->destroy();
-  }
-}
-
-void Window::initialize_texture() {
-  soccer_texture = SDL_CreateTextureFromSurface(rend, soccer_surface);
-  background_texture = SDL_CreateTextureFromSurface(rend, background_surface);
-  if (!soccer_texture || !background_texture)
-  {
-      printf("error creating texture: %s\n", SDL_GetError());
-      this->destroy();
-  }
+SDL_Rect* Window::add_object(std::string name, SDL_Surface * surface, bool has_position){
+  ImageObject imageobject(name, rend, surface, has_position);
+  objects.push_back(imageobject);
+  return imageobject.get_rect();
 }
 
 void Window::resize(int width, int height) {
   SDL_SetWindowSize(win, width, height);
 }
 
-void Window::refresh_window(SDL_Rect dest, int score) {
+void Window::refresh_window(int score) {
   SDL_RenderClear(rend);
-  SDL_RenderCopy(rend, background_texture, NULL, NULL);
-  SDL_RenderCopy(rend, soccer_texture, NULL, &dest);
+  for (int i=0; i<objects.size(); i++){
+    SDL_RenderCopy(rend, objects[i].get_texture(), NULL, objects[i].get_rect());
+  }
   SDL_RenderPresent(rend);
 }
 
 void Window::destroy() {
-  if (soccer_surface){
-    SDL_FreeSurface(soccer_surface);
-  }
-  if (background_surface){
-    SDL_FreeSurface(background_surface);
-  }
-  if (soccer_texture) {
-    SDL_DestroyTexture(soccer_texture);
-    printf("Soccer texture destroyed\n");
-  }
-  if (background_texture) {
-    SDL_DestroyTexture(soccer_texture);
-    printf("Background texture destroyed\n");
+  for (int i=0; i<objects.size(); i++){
+    objects[i].destroy();
   }
   if (rend){
     SDL_DestroyRenderer(rend);

@@ -17,12 +17,13 @@
 
 void Game::play_game() {
   int game_finish = 0;
-  SDL_Rect dest;
+  window->add_object("background", IMG_Load("resources/background.png"), false);
+  SDL_Rect* dest = window->add_object("ball", IMG_Load("resources/soccer.png"), true);
 
-  dest.w = 40;
-  dest.h = 40;
-  dest.x = 280;
-  dest.y = 400;
+  dest->w = 40;
+  dest->h = 40;
+  dest->x = 280;
+  dest->y = 400;
 
   float vx = 0.0;
   float vy = -250.0;
@@ -67,20 +68,20 @@ void Game::play_game() {
       wall_hit(vx, x_pos, 0);
     }
 
-    if (x_pos >= WINDOW_WIDTH - dest.w) {
-      wall_hit(vx, x_pos, WINDOW_WIDTH - dest.w);
+    if (x_pos >= WINDOW_WIDTH - dest->w) {
+      wall_hit(vx, x_pos, WINDOW_WIDTH - dest->w);
     }
 
-    if (y_pos >= WINDOW_HEIGHT - dest.h) {
-      y_pos = WINDOW_HEIGHT - dest.h;
+    if (y_pos >= WINDOW_HEIGHT - dest->h) {
+      y_pos = WINDOW_HEIGHT - dest->h;
       printf("GAME OVER\n");
       game_finish=1;
     }
     // set the positions in the struct
-    dest.y = (int) y_pos;
-    dest.x = (int) x_pos;
+    dest->y = (int) y_pos;
+    dest->x = (int) x_pos;
 
-    window->refresh_window(dest, 0);
+    window->refresh_window(0);
     SDL_Delay(1000/60);
   }
 
